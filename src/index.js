@@ -119,28 +119,14 @@ class Calculation {
 }
 
 
-
-
 Calculation = new Calculation(); // Create a singleton
 
-// const expr = "((1 + 2) * 3";
-// const expr = "2 + 2";
-// const expr = "1/2";
-// var test = expressionCalculator(expr);
-// // var tset = Number(expressionCalculator(expr));
-// var t =2;
-
 function expressionCalculator(expr) {
-    // write your solution here
-    //expr = expr.replace(/\s/g, '');
-    //return Number(calculate(expr));
-
     var start = expr.match(/\(/g);
     var end = expr.match(/\)/g);
     if((start && !end) || (!start && end) || (start && end && start.length!=end.length)){
         throw "ExpressionError: Brackets must be paired";
     }
-
     var exprRep = expr.replace(/\s/g, '');
     var test = Calculation.calculate(exprRep);
     return test;
@@ -150,40 +136,3 @@ function expressionCalculator(expr) {
 module.exports = {
     expressionCalculator
 }
-
-function calculate(str) {
-    var was_str;
-    var sum_or_diff=function(sub, a, sign, b) {
-     return sign=="-" ? a-b : +a + +b;
-    };
-    var mult_or_div= function(sub, a, sign, b) {
-     if(sign=="*"){
-        return a*b;
-     }else{
-        if(b==0)
-            throw "TypeError: Division by zero.";
-        return a/b;
-     }
-    };
-    var power= function(sub, a, b) {
-     return Math.pow(a, b);
-    };
-    var match_power= /(-?[\d\.]+)\s*\^\s*(-?[\d\.]+)/g;
-    var match_mult_div= /(-?[\d\.]+)\s*([\*\/])\s*(-?[\d\.]+)/g;
-    var match_sum_diff= /(-?[\d\.]+)\s*([\+-])\s*(-?[\d\.]+)/g;
-    
-    var get_value= function(sub, exp) {
-     while(exp.indexOf("^")!==-1)
-      exp= exp.replace(match_power, power);
-     while(match_mult_div.test(exp))
-      exp= exp.replace(match_mult_div, mult_or_div);
-     while(match_sum_diff.test(exp))
-      exp= exp.replace(match_sum_diff, sum_or_diff);
-     return exp;
-    };
-    while(str.indexOf("(") !== -1) // убираем скобки
-     str=str.replace(/\(([^\(\)]*)\)/g, get_value);
-    
-    var res = get_value("", str);
-    return res;
-    };
